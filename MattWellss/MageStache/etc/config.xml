@@ -1,0 +1,19 @@
+<config>
+    <modules>
+        <MattWellss_MageStache>
+            <version>0.1.0</version>
+        </MattWellss_MageStache>
+    </modules>
+    <global>
+        <blocks>
+            <magestache>
+                <class>MattWellss_MageStache_Block</class>
+            </magestache>
+        </blocks>
+        <helpers>
+            <magestache>
+                <class>MattWellss\MageStache\Helper</class>
+            </magestache>
+        </helpers>
+    </global>
+</config>

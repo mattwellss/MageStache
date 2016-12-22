@@ -1,0 +1,8 @@
+<config>
+    <modules>
+        <MattWellss_MageStache>
+            <active>true</active>
+            <codePool>community</codePool>
+        </MattWellss_MageStache>
+    </modules>
+</config>

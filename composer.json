@@ -1,0 +1,23 @@
+{
+    "name": "mattwellss/magestache",
+    "license": "MIT",
+    "type": "magento-module",
+    "description": "Mustache for Magento 1",
+    "require": {
+        "phly/phly-mustache": "^2.0"
+    },
+    "suggest": {
+         "mattwellss/magento-composer-autoloader": "To support autoloading with namespaces. However, any composer-based autoloading should work fine."
+    },
+    "autoload": {
+        "psr-0": {
+            "MattWellss\\MageStache": "."
+        }
+    },
+    "extra": {
+        "map": [
+            ["MattWellss_MageStache.xml", "app/etc/modules/MattWellss_MageStache.xml"],
+            ["MattWellss/MageStache/*", "app/code/community/MattWellss/MageStache"]
+        ]
+    }
+}
