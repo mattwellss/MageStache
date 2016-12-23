@@ -3,6 +3,7 @@
 namespace MattWellss\MageStache;
 
 use Mage;
+use MattWellss_MageStache_Block_Mustache_Template;
 use Phly\Mustache\Exception\InvalidPartialsException;
 use Phly\Mustache\Lexer;
 use Phly\Mustache\Mustache;
@@ -76,7 +77,7 @@ class MagentoPragma implements PragmaInterface
         $child = Mage::getSingleton('core/layout')->getBlock($childMeta['partial']);
 
         // The view, being a mustache template, will now be rendered as HTML
-        if ($child && $child instanceof Block_Mustache_Template) {
+        if ($child && $child instanceof MattWellss_MageStache_Block_Mustache_Template) {
             /** @see Block_Mustache_Template::toHtml() */
             return $child->toHtml();
         }
