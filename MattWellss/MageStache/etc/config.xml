@@ -15,5 +15,14 @@
                 <class>MattWellss\MageStache\Helper</class>
             </magestache>
         </helpers>
+        <cache>
+            <types>
+                <mustache translate="label,description">
+                    <label>Mustache Template Tokens</label>
+                    <description>Mustache Template token cache</description>
+                    <tags>MUSTACHE_TOKENS</tags>
+                </mustache>
+            </types>
+        </cache>
     </global>
 </config>

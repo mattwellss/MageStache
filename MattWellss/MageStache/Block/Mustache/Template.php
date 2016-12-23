@@ -83,8 +83,7 @@ class MattWellss_MageStache_Block_Mustache_Template extends Mage_Core_Block_Temp
         /** @var Mage_Core_Helper_Data $helper */
         $helper = Mage::helper('core');
 
-        // Use fieldset copying to convert block source data
-        //  into target
+        // Use fieldset copying to convert block source data into target
         $helper->copyFieldset(
             $this->fieldsetName,
             'to_array',
@@ -94,5 +93,9 @@ class MattWellss_MageStache_Block_Mustache_Template extends Mage_Core_Block_Temp
         return $data;
     }
 
-
+    protected function _saveCache($data)
+    {
+        Mage::helper('magestache/mustache')->cacheToken($this->getNameInLayout());
+        return parent::_saveCache($data);
+    }
 }

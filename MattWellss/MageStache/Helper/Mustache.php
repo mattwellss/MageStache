@@ -16,6 +16,15 @@ use Phly\Mustache\Mustache;
  */
 class Helper_Mustache extends Mage_Core_Helper_Data
 {
+    const CACHE_ID = 'mustache_tokens';
+
+    private $cacheDirty = false;
+
+    /**
+     * @var array
+     */
+    private $cache = [];
+
     /**
      * @var Mustache
      */
@@ -29,6 +38,10 @@ class Helper_Mustache extends Mage_Core_Helper_Data
     public function __construct()
     {
         $this->mustache = new Mustache();
+
+        $this->cache = unserialize(Mage::app()->loadCache(static::CACHE_ID) ?: 'a:0:{}');
+
+        $this->mustache->restoreTokens($this->cache);
 
         $this->mustache->getResolver()
             ->attach(new MagentoResolver(), 100);
@@ -49,5 +62,29 @@ class Helper_Mustache extends Mage_Core_Helper_Data
     public function render($template, $view, array $partials = [])
     {
         return $this->mustache->render($template, $view, $partials);
+    }
+
+    /**
+     * Returns true if the token was cached, false otherwise
+     * @param $name
+     * @return bool
+     */
+    public function cacheToken($name)
+    {
+        $tokens = $this->mustache->getAllTokens();
+        if (array_key_exists($name, $tokens) && !array_key_exists($name, $this->cache)) {
+            $this->cache[$name] = $tokens[$name];
+            $this->cacheDirty = true;
+            return true;
+        }
+
+        return false;
+    }
+
+    function __destruct()
+    {
+        if ($this->cacheDirty) {
+            Mage::app()->saveCache(serialize($this->cache), self::CACHE_ID, ['MUSTACHE_TOKENS']);
+        }
     }
 }
