@@ -45,7 +45,7 @@ class MattWellss_MageStache_Block_Mustache_Template extends Mage_Core_Block_Temp
         /** @var Helper_Mustache $mustache */
         $mustache = Mage::helper('magestache/mustache');
 
-        return $mustache->render($this->getNameInLayout(), $this->_prepareArray());
+        return $mustache->render($this->getNameInLayout(), $this->_prepareData());
     }
 
     /**
@@ -65,7 +65,7 @@ class MattWellss_MageStache_Block_Mustache_Template extends Mage_Core_Block_Temp
      *
      * @return array
      */
-    protected function _prepareArray()
+    protected function _prepareData()
     {
         // Set the block used for source data.
         // First preference is "dataBlock,"
