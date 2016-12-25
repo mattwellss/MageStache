@@ -38,7 +38,7 @@ class MagentoResolver implements ResolverInterface
         // Could not resolve, return empty
         // Note that we don't return a "coerces-to-false" empty string!
         if (!$block) {
-            return ' ';
+            return false;
         }
 
         // If it's a mustache template, we return the contents.

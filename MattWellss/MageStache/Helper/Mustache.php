@@ -6,6 +6,7 @@ use Mage;
 use Mage_Core_Helper_Data;
 use Phly\Mustache\Exception\InvalidPartialsException;
 use Phly\Mustache\Mustache;
+use Phly\Mustache\Resolver\AggregateResolver;
 
 /**
  * @author Matthew Wells <ttamsllew@gmail.com>
@@ -37,14 +38,15 @@ class Helper_Mustache extends Mage_Core_Helper_Data
      */
     public function __construct()
     {
-        $this->mustache = new Mustache();
+        $this->mustache = new Mustache(new AggregateResolver());
 
         $this->cache = unserialize(Mage::app()->loadCache(static::CACHE_ID) ?: 'a:0:{}');
 
         $this->mustache->restoreTokens($this->cache);
 
         $this->mustache->getResolver()
-            ->attach(new MagentoResolver(), 100);
+            ->attach(new MagentoResolver(), 1)
+            ->attach(new TextResolver(), 0);
 
         $this->mustache->getPragmas()
             ->add(new MagentoPragma(Mage::getSingleton('core/layout')));
