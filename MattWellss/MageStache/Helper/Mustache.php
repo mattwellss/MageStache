@@ -41,7 +41,9 @@ class Helper_Mustache extends Mage_Core_Helper_Data
     {
         $this->mustache = new Mustache(new AggregateResolver());
 
-        $this->cache = unserialize(Mage::app()->loadCache(static::CACHE_ID) ?: 'a:0:{}');
+        if (Mage::app()->useCache('mustache')) {
+            $this->cache = unserialize(Mage::app()->loadCache(static::CACHE_ID) ?: 'a:0:{}');
+        }
 
         $this->mustache->restoreTokens($this->cache);
 
@@ -87,8 +89,8 @@ class Helper_Mustache extends Mage_Core_Helper_Data
 
     function __destruct()
     {
-        if ($this->cacheDirty) {
-            Mage::app()->saveCache(serialize($this->cache), self::CACHE_ID, ['MUSTACHE_TOKENS']);
+        if ($this->cacheDirty && Mage::app()->useCache('mustache')) {
+            Mage::app()->saveCache(serialize($this->cache), self::CACHE_ID, [self::CACHE_ID]);
         }
     }
 }
