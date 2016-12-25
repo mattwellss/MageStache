@@ -6,6 +6,7 @@ use Mage;
 use Mage_Core_Helper_Data;
 use Phly\Mustache\Exception\InvalidPartialsException;
 use Phly\Mustache\Mustache;
+use Phly\Mustache\Pragma\ImplicitIterator;
 use Phly\Mustache\Resolver\AggregateResolver;
 
 /**
@@ -48,8 +49,9 @@ class Helper_Mustache extends Mage_Core_Helper_Data
             ->attach(new MagentoResolver(), 1)
             ->attach(new TextResolver(), 0);
 
-        $this->mustache->getPragmas()
-            ->add(new MagentoPragma(Mage::getSingleton('core/layout')));
+        $pragmas = $this->mustache->getPragmas();
+        $pragmas->add(new MagentoPragma(Mage::getSingleton('core/layout')));
+        $pragmas->add(new ImplicitIterator());
     }
 
     /**

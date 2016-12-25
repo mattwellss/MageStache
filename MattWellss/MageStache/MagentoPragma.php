@@ -79,6 +79,13 @@ class MagentoPragma implements PragmaInterface
         // The view, being a mustache template, will now be rendered as HTML
         if ($child && $child instanceof MattWellss_MageStache_Block_Mustache_Template) {
             /** @see Block_Mustache_Template::toHtml() */
+            if (is_array($view)) {
+                $child->addData($view);
+            }
+
+            if (is_object($view) && $view instanceof \Varien_Object) {
+                $child->addData($view->getData());
+            }
             return $child->toHtml();
         }
 

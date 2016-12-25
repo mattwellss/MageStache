@@ -48,6 +48,26 @@ class MattWellss_MageStache_Block_Mustache_Template extends Mage_Core_Block_Temp
         return $mustache->render($this->getNameInLayout(), $this->_prepareData());
     }
 
+    protected function getTargetData()
+    {
+        return new Varien_Object([
+            '__' => function () {
+                return function ($text, $renderer) {
+                    return $this->__($renderer($text));
+                };
+            },
+            'quoteEscape' => function () {
+                return function ($text, $renderer) {
+                    return $this->quoteEscape($renderer($text) ?: $text);
+                };
+            },
+            'stripTags' => function () {
+                return function ($text, $renderer) {
+                    return $this->stripTags($renderer($text) ?: $text);
+                };
+            }]);
+    }
+
     /**
      * An override to *ensure* that the output from fetchView
      *  is always captured, not `echo`ed
@@ -77,7 +97,9 @@ class MattWellss_MageStache_Block_Mustache_Template extends Mage_Core_Block_Temp
         //  so we assume the us er doesn't care to
         //  do so. Use the block's data
         if (is_null($this->fieldsetName)) {
-            return $dataSourceBlock->getData();
+            return $this->getTargetData()
+                ->addData($dataSourceBlock->getData())
+                ->getData();
         }
 
         /** @var Mage_Core_Helper_Data $helper */
@@ -86,12 +108,21 @@ class MattWellss_MageStache_Block_Mustache_Template extends Mage_Core_Block_Temp
         // Use fieldset copying to convert block source data into target
         $helper->copyFieldset(
             $this->fieldsetName,
-            'to_array',
+            'to_mustache',
             $dataSourceBlock,
-            $data = []);
+            $data = $this->getTargetData());
 
-        return $data;
+        return $data->getData();
     }
+
+    protected function _beforeToHtml()
+    {
+        if ($this->dataBlock instanceof Mage_Core_Block_Abstract) {
+            $this->dataBlock->_beforeToHtml();
+        }
+        return parent::_beforeToHtml();
+    }
+
 
     protected function _saveCache($data)
     {
