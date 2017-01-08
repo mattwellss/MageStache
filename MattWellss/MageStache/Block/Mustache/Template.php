@@ -1,4 +1,5 @@
 <?php
+use MattWellss\MageStache\Helper_Mustache;
 
 
 /**
@@ -13,6 +14,11 @@
  */
 class MattWellss_MageStache_Block_Mustache_Template extends Mage_Core_Block_Template
 {
+    /**
+     * @var bool
+     */
+    protected $_flaggedForRegistry = false;
+
     /**
      * @var Mage_Core_Block_Template|null
      */
@@ -115,11 +121,26 @@ class MattWellss_MageStache_Block_Mustache_Template extends Mage_Core_Block_Temp
         return $data->getData();
     }
 
+    /**
+     * Add this block to the frontend template registry
+     */
+    public function flagForRegistry()
+    {
+        $this->_flaggedForRegistry = true;
+    }
+
     protected function _beforeToHtml()
     {
+        // If this block has been flagged for use in the template registry, add it to the registry
+        if ($this->_flaggedForRegistry) {
+            $this->_flaggedForRegistry = false; // This only should be done once
+            $this->getLayout()->getBlock('magestache.template.registry')->insert(clone $this);
+        }
+
         if ($this->dataBlock instanceof Mage_Core_Block_Abstract) {
             $this->dataBlock->_beforeToHtml();
         }
+
         return parent::_beforeToHtml();
     }
 
